@@ -45,7 +45,8 @@ body {
     border-radius: 10px;
     padding: 0 20px;
 }
-.button:active{
+
+.button:active {
     font-size: 4rem;
     color: #88DBEE;
     background-color: #2A2D36;

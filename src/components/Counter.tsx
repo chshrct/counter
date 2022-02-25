@@ -3,33 +3,38 @@ import React, {useState} from "react";
 import {Button} from './Button';
 
 type CounterPropsType = {
+    minVal: number
     maxVal: number
 }
 
-export const Counter:React.FC<CounterPropsType> = ({maxVal}) => {
+export const Counter: React.FC<CounterPropsType> = ({minVal, maxVal}) => {
 
-    let [counter, setCounter] = useState<number>(0)
+    const MAX_VALUE = maxVal
+    const MIN_VALUE = minVal
+    const COUNTER_STEP = 1
 
-    const maxValue = counter >= maxVal
-    const minValue = counter === 0
+    const [counter, setCounter] = useState<number>(MIN_VALUE)
 
-    const incClass = s.button + ' ' + (maxValue && s.disabled)
-    const resetClass = s.button + ' ' + (minValue && s.disabled)
+    const maxValueReached = counter === MAX_VALUE
+    const minValueReached = counter === MIN_VALUE
+
+    const incClass = s.button + ' ' + (maxValueReached && s.disabled)
+    const resetClass = s.button + ' ' + (minValueReached && s.disabled)
 
     const onClickIncHandler = () => {
-        setCounter(++counter)
+        !maxValueReached && setCounter(counter + COUNTER_STEP)
     }
     const onClickResHandler = () => {
-        setCounter(0)
+        setCounter(MIN_VALUE)
     }
 
     return <div className={s.counterWrapper}>
-        <div className={s.counterShow + ' ' + (maxValue && s.red)}>{counter}</div>
+        <div className={s.counterShow + ' ' + (maxValueReached && s.red)}>{counter}</div>
         <div className={s.buttonsWrapper}>
             <Button name={'inc'} className={incClass} onClick={onClickIncHandler}
-                    isDisabled={maxValue}/>
+                    isDisabled={maxValueReached}/>
             <Button name={'reset'} className={resetClass} onClick={onClickResHandler}
-                    isDisabled={minValue}/>
+                    isDisabled={minValueReached}/>
         </div>
     </div>
 }
