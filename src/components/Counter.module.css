@@ -2,7 +2,13 @@ body {
     background-color: #2A2D36;
 }
 
-.counterWrapper {
+.counter{
+    display: flex;
+    gap:20px;
+    padding: 10px;
+}
+
+.counterMain {
     /*position: absolute;*/
     /*top: 50%;*/
     /*left:50%;*/
@@ -18,16 +24,46 @@ body {
     border-radius: 10px;
 }
 
-.counterShow {
+.counterPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
     width: 400px;
     height: 250px;
     background-color: #88DBEE;
     border-radius: 10px;
-    font-size: 10rem;
-    text-align: center;
+}
+.counterPanelItem{
+    display: flex;
+    gap:10px;
+    font-size: 2rem;
 }
 
-.buttonsWrapper {
+.counterPanelInput{
+    text-align: center;
+    font-size: 1rem;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+.counterPanelInputError{
+    outline: none;
+    border: 2px solid red;
+}
+
+.counterView{
+    font-size: 2rem;
+}
+
+.counterViewNum{
+    font-size: 6rem;
+}
+
+.inputTitle{
+    font-size:2rem;
+}
+
+.counterControls {
     display: flex;
     align-items: center;
     justify-content: space-around;
