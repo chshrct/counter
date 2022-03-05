@@ -1,39 +1,33 @@
 import s from "./Counter.module.css";
-import React, {ChangeEvent} from "react";
+import React from "react";
 import {CounterSettingsPanelInput} from "./CounterSettingsPanelInput";
 import {CounterStateType} from "./Counter";
 
 type CounterSettingsPanelPropsType = {
     minValue: number
     maxValue: number
-    setMinValueHandler: (val: number) => void
-    setMaxValueHandler: (val: number) => void
-    counterState:CounterStateType;
+    setupMinValue: (val: number) => void
+    setupMaxValue: (val: number) => void
+    counterState: CounterStateType;
 }
 
 export const CounterSettingsPanel: React.FC<CounterSettingsPanelPropsType> = ({
                                                                                   minValue,
                                                                                   maxValue,
-                                                                                  setMinValueHandler,
-                                                                                  setMaxValueHandler,
+                                                                                  setupMinValue,
+                                                                                  setupMaxValue,
                                                                                   counterState
                                                                               }) => {
-    const onChangeMinInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setMinValueHandler(Number(e.currentTarget.value))
-    }
-    const onChangeMaxInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setMaxValueHandler(Number(e.currentTarget.value))
-    }
 
     return <div className={s.counterPanel}>
         <CounterSettingsPanelInput title={'Max Value:'}
                                    value={maxValue}
-                                   onChange={onChangeMaxInputHandler}
-                                   error={counterState==='errorMax'}/>
+                                   onChange={setupMaxValue}
+                                   error={counterState === 'errorMax'}/>
         <CounterSettingsPanelInput title={'Min Value:'}
                                    value={minValue}
-                                   onChange={onChangeMinInputHandler}
-                                   error={counterState==='errorMin' || counterState==='errorMax'}/>
+                                   onChange={setupMinValue}
+                                   error={counterState === 'errorMin' || counterState === 'errorMax'}/>
     </div>
 }
 

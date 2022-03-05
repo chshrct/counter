@@ -3,18 +3,28 @@ import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes} from "react"
 type defaultInputPropsType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
 type InputPropsType = defaultInputPropsType & {
-    onChange?: (e: ChangeEvent<HTMLInputElement>) => void
-    className?:string
-    errorClassName?:string
+    onChangeNumber?: (e: number) => void
+    errorClassName?: string
 }
 
-export const Input: React.FC<InputPropsType> = ({onChange,className,errorClassName, ...restProps}) => {
+export const Input: React.FC<InputPropsType> = ({
+                                                    type,
+                                                    onChangeNumber,
+                                                    className,
+                                                    errorClassName,
+                                                    ...restProps
+                                                }) => {
 
-    const inputClassName = `${className?className:''} ${errorClassName?errorClassName:''}`;
+    const inputClassName = `${className ? className : ''} ${errorClassName ? errorClassName : ''}`;
 
-    return <input type={restProps.type}
+    const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        onChangeNumber && onChangeNumber(Number(e.currentTarget.value))
+    }
+
+    return <input type={'number'}
                   className={inputClassName}
-                  value={restProps.value}
-                  onChange={onChange ? onChange : () => {}}
+                  onChange={onChangeInputHandler}
+
+                  {...restProps}
     />
 }

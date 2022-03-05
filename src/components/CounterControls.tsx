@@ -2,22 +2,49 @@ import React from "react";
 import s from "./Counter.module.css";
 import {Button} from "./Button";
 
-type ButtonsContainerPropsType = {
-    incIsDisabled:boolean
-    resIsDisabled:boolean
-    onClickIncHandler:()=>void
-    onClickResHandler:()=>void
+type CounterControlsPropsType = {
+    incIsDisabled?: boolean
+    resIsDisabled?: boolean
+    incrementCounter?: () => void
+    resetCounter?: () => void
+    setIsDisabled?: boolean
+    setSettings?: () => void
 }
 
-export const CounterControls:React.FC<ButtonsContainerPropsType> = ({incIsDisabled,resIsDisabled,onClickIncHandler,onClickResHandler}) => {
+export const CounterControls: React.FC<CounterControlsPropsType> = ({
+                                                                        incIsDisabled,
+                                                                        resIsDisabled,
+                                                                        incrementCounter,
+                                                                        resetCounter,
+                                                                        setSettings,
+                                                                        setIsDisabled
+                                                                    }) => {
 
     const incClass = s.button + ' ' + (incIsDisabled && s.disabled)
     const resetClass = s.button + ' ' + (resIsDisabled && s.disabled)
+    const setClass = s.button + ' ' + (setIsDisabled && s.disabled)
+
 
     return <div className={s.counterControls}>
-        <Button name={'inc'} className={incClass} onClick={onClickIncHandler}
-                isDisabled={incIsDisabled}/>
-        <Button name={'reset'} className={resetClass} onClick={onClickResHandler}
-                isDisabled={resIsDisabled}/>
+        {incrementCounter && <>
+            <Button
+                className={incClass}
+                onClick={incrementCounter}
+                disabled={incIsDisabled}>
+                inc
+            </Button>
+            <Button
+                className={resetClass}
+                onClick={resetCounter}
+                disabled={resIsDisabled}>
+                reset
+            </Button></>}
+        {setSettings &&
+            <Button
+                className={setClass}
+                onClick={setSettings}
+                disabled={setIsDisabled}>
+                set
+            </Button>}
     </div>
 }

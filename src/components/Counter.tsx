@@ -3,67 +3,66 @@ import React, {useEffect, useState} from "react";
 import {CounterPanel} from "./CounterPanel";
 import {CounterControls} from "./CounterControls";
 import {CounterSettingsPanel} from "./CounterSettingsPanel";
-import {CounterSettingsControl} from "./CounterSettingsControl";
 
 export type CounterStateType = 'setup' | 'errorMin' | 'errorMax' | 'count'
 
 export const Counter: React.FC = () => {
 
-    useEffect(()=>{
+    useEffect(() => {
         const counterStr = localStorage.getItem('counter')
-        if(counterStr){
+        if (counterStr) {
             setCounter(JSON.parse(counterStr))
         }
         const minVStr = localStorage.getItem('min')
-        if(minVStr){
+        if (minVStr) {
             setMinValue(JSON.parse(minVStr))
         }
         const maxVStr = localStorage.getItem('max')
-        if(maxVStr){
+        if (maxVStr) {
             setMaxValue(JSON.parse(maxVStr))
         }
         const counterSStr = localStorage.getItem('counterState')
-        if(counterSStr){
+        if (counterSStr) {
             setCounterState(JSON.parse(counterSStr))
         }
-    },[])
+    }, [])
 
     const MIN_VALUE = 0;
+    const INIT_MAX_VALUE = 5;
     const COUNTER_STEP = 1
 
-    const [maxValue, setMaxValue] = useState<number>(MIN_VALUE)
+    const [maxValue, setMaxValue] = useState<number>(INIT_MAX_VALUE)
     const [minValue, setMinValue] = useState<number>(MIN_VALUE)
     const [counter, setCounter] = useState<number>(minValue)
-    const [counterState, setCounterState] = useState<CounterStateType>('errorMax')
+    const [counterState, setCounterState] = useState<CounterStateType>('count')
 
     const incIsDisabled = (counter >= maxValue) || !(counterState === 'count')
     const resIsDisabled = (counter <= MIN_VALUE) || !(counterState === 'count')
+    const setIsDisabled = !(counterState === 'setup')
 
 
-
-    useEffect(()=>{
-        localStorage.setItem('counter',JSON.stringify(counter))
-    },[counter])
-    useEffect(()=>{
-        localStorage.setItem('counterState',JSON.stringify(counterState))
-    },[counterState])
-    useEffect(()=>{
-        localStorage.setItem('min',JSON.stringify(minValue))
-    },[minValue])
-    useEffect(()=>{
-        localStorage.setItem('max',JSON.stringify(maxValue))
-    },[maxValue])
-
+    useEffect(() => {
+        localStorage.setItem('counter', JSON.stringify(counter))
+    }, [counter])
+    useEffect(() => {
+        localStorage.setItem('counterState', JSON.stringify(counterState))
+    }, [counterState])
+    useEffect(() => {
+        localStorage.setItem('min', JSON.stringify(minValue))
+    }, [minValue])
+    useEffect(() => {
+        localStorage.setItem('max', JSON.stringify(maxValue))
+    }, [maxValue])
 
 
-    const onClickIncHandler = () => {
+    const incrementCounter = () => {
         !incIsDisabled && setCounter(counter + COUNTER_STEP)
     }
-    const onClickResHandler = () => {
+    const resetCounter = () => {
         setCounter(minValue)
     }
 
-    const setMinValueHandler = (val: number) => {
+    const setupMinValue = (val: number) => {
         if (val >= maxValue) {
             setCounterState('errorMax')
         } else if (val < MIN_VALUE) {
@@ -74,18 +73,18 @@ export const Counter: React.FC = () => {
         setMinValue(val)
 
     }
-    const setMaxValueHandler = (val: number) => {
-        if(val<=minValue){
+    const setupMaxValue = (val: number) => {
+        if (val <= minValue) {
             setCounterState('errorMax')
-        }else if(minValue<MIN_VALUE){
+        } else if (minValue < MIN_VALUE) {
             setCounterState('errorMin')
-        }else{
+        } else {
             setCounterState('setup')
         }
         setMaxValue(val)
     }
 
-    const setSettingsHandler = () => {
+    const setSettings = () => {
         setCounter(minValue)
         setCounterState('count')
     }
@@ -94,13 +93,13 @@ export const Counter: React.FC = () => {
         <div className={s.counterMain}>
             <CounterSettingsPanel minValue={minValue}
                                   maxValue={maxValue}
-                                  setMinValueHandler={setMinValueHandler}
-                                  setMaxValueHandler={setMaxValueHandler}
+                                  setupMinValue={setupMinValue}
+                                  setupMaxValue={setupMaxValue}
                                   counterState={counterState}
 
             />
-            <CounterSettingsControl setSettingsHandler={setSettingsHandler}
-                                    setIsDisabled={!(counterState === 'setup')}/>
+            <CounterControls setSettings={setSettings}
+                             setIsDisabled={setIsDisabled}/>
         </div>
         <div className={s.counterMain}>
             <CounterPanel maxValueReached={incIsDisabled}
@@ -109,8 +108,8 @@ export const Counter: React.FC = () => {
             />
             <CounterControls incIsDisabled={incIsDisabled}
                              resIsDisabled={resIsDisabled}
-                             onClickIncHandler={onClickIncHandler}
-                             onClickResHandler={onClickResHandler}
+                             incrementCounter={incrementCounter}
+                             resetCounter={resetCounter}
 
             />
         </div>

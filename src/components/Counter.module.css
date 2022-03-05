@@ -2,9 +2,9 @@ body {
     background-color: #2A2D36;
 }
 
-.counter{
+.counter {
     display: flex;
-    gap:20px;
+    gap: 20px;
     padding: 10px;
 }
 
@@ -34,33 +34,35 @@ body {
     background-color: #88DBEE;
     border-radius: 10px;
 }
-.counterPanelItem{
+
+.counterPanelItem {
     display: flex;
-    gap:10px;
+    gap: 10px;
     font-size: 2rem;
 }
 
-.counterPanelInput{
+.counterPanelInput {
     text-align: center;
     font-size: 1rem;
     border: 2px solid black;
     border-radius: 5px;
 }
-.counterPanelInputError{
+
+.counterPanelInputError {
     outline: none;
     border: 2px solid red;
 }
 
-.counterView{
+.counterView {
     font-size: 2rem;
 }
 
-.counterViewNum{
+.counterViewNum {
     font-size: 6rem;
 }
 
-.inputTitle{
-    font-size:2rem;
+.inputTitle {
+    font-size: 2rem;
 }
 
 .counterControls {

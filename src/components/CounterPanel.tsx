@@ -5,17 +5,26 @@ import {CounterStateType} from "./Counter";
 type CounterPanelPropsType = {
     maxValueReached: boolean
     counter: number
-    counterState:CounterStateType
+    counterState: CounterStateType
 }
 
-export const CounterPanel: React.FC<CounterPanelPropsType> = ({maxValueReached, counter,counterState}) => {
-    const counterClass = s.counterViewNum  + ' ' + (maxValueReached && s.red)
-    const errorClass = s.counterView  + ' ' + s.red
+export const CounterPanel: React.FC<CounterPanelPropsType> = ({maxValueReached, counter, counterState}) => {
+
+    const counterClass = s.counterViewNum + ' ' + (maxValueReached && s.red)
+    const errorClass = s.counterView + ' ' + s.red
     const setupClass = s.counterView
+
+    const showCounter = counterState === 'count' &&
+        <div className={counterClass}>{counter}</div>
+    const showErrorMessage = (counterState === 'errorMin' || counterState === 'errorMax') &&
+        <div className={errorClass}>Incorrect value</div>
+    const showSetupMessage = counterState === 'setup' &&
+        <div className={setupClass}>Enter values and press 'set'</div>
+
     return <div className={s.counterPanel}>
-        {counterState==='count' && <div className={counterClass}>{counter}</div>}
-        {(counterState==='errorMin' || counterState==='errorMax') && <div className={errorClass}>Incorrect value</div>}
-        {counterState==='setup' && <div className={setupClass}>Enter values and press 'set'</div>}
+        {showCounter}
+        {showErrorMessage}
+        {showSetupMessage}
     </div>
 }
 
