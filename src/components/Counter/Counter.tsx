@@ -20,6 +20,13 @@ export enum CounterStateType {
   count = "count",
 }
 
+export enum LocalStorageItems {
+  counterState = "counterState",
+  counter = "counter",
+  minValue = "minValue",
+  maxValue = "maxValue",
+}
+
 export type StateType = {
   maxValue: number;
   minValue: number;
@@ -41,16 +48,18 @@ export const Counter: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initState);
 
   const incIsDisabled =
-    state.counter >= state.maxValue || !(state.counterState === CounterStateType.count);
+    state.counter >= state.maxValue ||
+    !(state.counterState === CounterStateType.count);
   const resIsDisabled =
-    state.counter <= MIN_VALUE || !(state.counterState === CounterStateType.count);
+    state.counter <= MIN_VALUE ||
+    !(state.counterState === CounterStateType.count);
   const setIsDisabled = !(state.counterState === CounterStateType.setup);
 
   useEffect(() => {
-    const counterStr = localStorage.getItem("counter");
-    const minVStr = localStorage.getItem("min");
-    const maxVStr = localStorage.getItem("max");
-    const counterSStr = localStorage.getItem("counterState");
+    const counterStr = localStorage.getItem(LocalStorageItems.counter);
+    const minVStr = localStorage.getItem(LocalStorageItems.minValue);
+    const maxVStr = localStorage.getItem(LocalStorageItems.maxValue);
+    const counterStateStr = localStorage.getItem(LocalStorageItems.counterState);
 
     if (counterStr) {
       dispatch(setCounterAC(JSON.parse(counterStr)));
@@ -61,25 +70,25 @@ export const Counter: React.FC = () => {
     if (maxVStr) {
       dispatch(setMaxValueAC(JSON.parse(maxVStr)));
     }
-    if (counterSStr) {
-      dispatch(setCounterStatusAC(JSON.parse(counterSStr)));
+    if (counterStateStr) {
+      dispatch(setCounterStatusAC(JSON.parse(counterStateStr)));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("counter", JSON.stringify(state.counter));
+    localStorage.setItem(LocalStorageItems.counter, JSON.stringify(state.counter));
   }, [state.counter]);
 
   useEffect(() => {
-    localStorage.setItem("counterState", JSON.stringify(state.counterState));
+    localStorage.setItem(LocalStorageItems.counterState, JSON.stringify(state.counterState));
   }, [state.counterState]);
 
   useEffect(() => {
-    localStorage.setItem("min", JSON.stringify(state.minValue));
+    localStorage.setItem(LocalStorageItems.minValue, JSON.stringify(state.minValue));
   }, [state.minValue]);
 
   useEffect(() => {
-    localStorage.setItem("max", JSON.stringify(state.maxValue));
+    localStorage.setItem(LocalStorageItems.maxValue, JSON.stringify(state.maxValue));
   }, [state.maxValue]);
 
   const incrementCounter = () => {
@@ -89,25 +98,25 @@ export const Counter: React.FC = () => {
     dispatch(resetCounterAC());
   };
 
-  const setupMinValue = (val: number) => {
-    dispatch(setMinValueAC(val));
-    if (val >= state.maxValue) {
+  const setupMinValue = (value: number) => {
+    dispatch(setMinValueAC(value));
+    if (value >= state.maxValue) {
       return dispatch(setCounterStatusAC(CounterStateType.errorMax));
     }
-    if (val < MIN_VALUE) {
+    if (value < MIN_VALUE) {
       return dispatch(setCounterStatusAC(CounterStateType.errorMin));
     }
     dispatch(setCounterStatusAC(CounterStateType.setup));
   };
-  const setupMaxValue = (val: number) => {
-    if (val <= state.minValue) {
+  const setupMaxValue = (value: number) => {
+    if (value <= state.minValue) {
       dispatch(setCounterStatusAC(CounterStateType.errorMax));
     } else if (state.minValue < MIN_VALUE) {
       dispatch(setCounterStatusAC(CounterStateType.errorMin));
     } else {
       dispatch(setCounterStatusAC(CounterStateType.setup));
     }
-    dispatch(setMaxValueAC(val));
+    dispatch(setMaxValueAC(value));
   };
 
   const setSettings = () => {
