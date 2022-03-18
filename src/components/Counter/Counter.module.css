@@ -1,0 +1,22 @@
+body {
+    background-color: #2A2D36;
+}
+
+.counter {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+}
+
+.counterMain {
+    display: flex;
+    flex-flow: column wrap;
+    align-content: center;
+    justify-content: space-around;
+    width: 500px;
+    height: 400px;
+    background-color: #2A2D36;
+    border: #88DBEE 1px solid;
+    border-radius: 10px;
+}
+

@@ -7,24 +7,25 @@ type InputPropsType = defaultInputPropsType & {
     errorClassName?: string
 }
 
-export const Input: React.FC<InputPropsType> = ({
-                                                    type,
-                                                    onChangeNumber,
-                                                    className,
-                                                    errorClassName,
-                                                    ...restProps
-                                                }) => {
+export const Input: React.FC<InputPropsType> = (props) => {
+
+    const {
+        type,
+        onChangeNumber,
+        className,
+        errorClassName,
+        ...restProps
+    } = props
 
     const inputClassName = `${className ? className : ''} ${errorClassName ? errorClassName : ''}`;
 
     const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        onChangeNumber && onChangeNumber(Number(e.currentTarget.value))
+        onChangeNumber?.(Number(e.currentTarget.value))
     }
 
     return <input type={'number'}
                   className={inputClassName}
                   onChange={onChangeInputHandler}
-
                   {...restProps}
     />
 }

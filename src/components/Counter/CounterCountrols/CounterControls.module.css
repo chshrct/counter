@@ -1,0 +1,30 @@
+.counterControls {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 400px;
+    height: 100px;
+    background-color: #2A2D36;
+    border: #88DBEE 1px solid;
+    border-radius: 10px;
+}
+
+.button {
+    font-size: 4rem;
+    color: #2A2D36;
+    background-color: #88DBEE;
+    border-radius: 10px;
+    padding: 0 20px;
+}
+
+.button:active {
+    font-size: 4rem;
+    color: #88DBEE;
+    background-color: #2A2D36;
+    border-radius: 10px;
+    padding: 0 20px;
+}
+
+.disabled {
+    opacity: .3;
+}
