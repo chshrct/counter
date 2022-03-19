@@ -1,40 +1,46 @@
 import s from "./CounterSettingsPanel.module.css";
 import React from "react";
-import {CounterSettingsPanelInput} from "./CounterSettingsPanelInput/CounterSettingsPanelInput";
-import {CounterStateType} from "../Counter";
+import {
+  CounterSettingsPanelInput,
+  InputType,
+} from "./CounterSettingsPanelInput/CounterSettingsPanelInput";
+import { ErrorStatusType } from "../Counter";
 
 type CounterSettingsPanelPropsType = {
-    minValue: number
-    maxValue: number
-    setupMinValue: (val: number) => void
-    setupMaxValue: (val: number) => void
-    counterState: CounterStateType;
-}
+  minValue: number;
+  maxValue: number;
+  errorStatus: ErrorStatusType;
+  dispatch: any;
+};
 
-export const CounterSettingsPanel: React.FC<CounterSettingsPanelPropsType> = (props) => {
+export const CounterSettingsPanel: React.FC<CounterSettingsPanelPropsType> = (
+  props,
+) => {
+  const { minValue, maxValue, errorStatus, dispatch } = props;
 
-    const {
-        minValue,
-        maxValue,
-        setupMinValue,
-        setupMaxValue,
-        counterState
-    } = props
+  const maxInputError = errorStatus === ErrorStatusType.errorMax;
+  const minInputError =
+    errorStatus === ErrorStatusType.errorMin ||
+    errorStatus === ErrorStatusType.errorMax;
 
-    const maxInputError = counterState === 'errorMax'
-    const minInputError = counterState === 'errorMin' || counterState === 'errorMax'
-
-    return <div className={s.counterPanel}>
-        <CounterSettingsPanelInput value={maxValue}
-                                   onChange={setupMaxValue}
-                                   error={maxInputError}>
-            Max Value:
-        </CounterSettingsPanelInput>
-        <CounterSettingsPanelInput value={minValue}
-                                   onChange={setupMinValue}
-                                   error={minInputError}>
-            Min Value:
-        </CounterSettingsPanelInput>
+  return (
+    <div className={s.counterPanel}>
+      <CounterSettingsPanelInput
+        type={InputType.max}
+        value={maxValue}
+        dispatch={dispatch}
+        error={maxInputError}
+      >
+        Max Value:
+      </CounterSettingsPanelInput>
+      <CounterSettingsPanelInput
+        type={InputType.min}
+        value={minValue}
+        dispatch={dispatch}
+        error={minInputError}
+      >
+        Min Value:
+      </CounterSettingsPanelInput>
     </div>
-}
-
+  );
+};

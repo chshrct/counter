@@ -11,6 +11,7 @@ export const Input: React.FC<InputPropsType> = (props) => {
 
     const {
         type,
+        onChange,
         onChangeNumber,
         className,
         errorClassName,
@@ -20,6 +21,7 @@ export const Input: React.FC<InputPropsType> = (props) => {
     const inputClassName = `${className ? className : ''} ${errorClassName ? errorClassName : ''}`;
 
     const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        onChange?.(e)
         onChangeNumber?.(Number(e.currentTarget.value))
     }
 
