@@ -1,6 +1,9 @@
 import React from "react";
+import {
+  CounterStatusType,
+  ErrorStatusType,
+} from "../../../store/counter-reducer";
 import s from "./CounterPanel.module.css";
-import { CounterStatusType, ErrorStatusType } from "../Counter";
 
 type CounterPanelPropsType = {
   maxValueReached: boolean;

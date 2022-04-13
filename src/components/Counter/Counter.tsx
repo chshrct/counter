@@ -1,64 +1,24 @@
 import s from "./Counter.module.css";
-import React, { useEffect, useReducer } from "react";
+import { FC, useEffect } from "react";
 import { CounterPanel } from "./CounterPanel/CounterPanel";
-import { CounterControls } from "./CounterCountrols/CounterControls";
+import { CounterControls } from "./CounterControls/CounterControls";
 import { CounterSettingsPanel } from "./CounterSettingsPanel/CounterSettingsPanel";
 import {
-  reducer,
+  CounterStatusType,
+  CountingStatusType,
+  ErrorStatusType,
+  LocalStorageItems,
   setCounterAction,
   setCounterStatusAction,
   setErrorStatusAction,
   setMaxValueAction,
   setMinValueAction,
-} from "./counterReducer";
+} from "../../store/counter-reducer";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
-export enum CounterStatusType {
-  setup = "setup",
-  count = "count",
-}
-
-export enum ErrorStatusType {
-  noError = "noError",
-  errorMin = "errorMin",
-  errorMax = "errorMax",
-}
-export enum CountingStatusType {
-  count = "count",
-  start = "start",
-  end = "end",
-}
-
-export enum LocalStorageItems {
-  counterStatus = "counterStatus",
-  errorStatus = "errorStatus",
-  counter = "counter",
-  minValue = "minValue",
-  maxValue = "maxValue",
-  countingStatus = "countingStatus",
-}
-
-export type StateType = {
-  counter: number;
-  maxValue: number;
-  minValue: number;
-  counterStatus: CounterStatusType;
-  countingStatus: CountingStatusType;
-  errorStatus: ErrorStatusType;
-};
-export const INIT_MIN_VALUE = 0;
-export const INIT_MAX_VALUE = 5;
-
-export const Counter: React.FC = () => {
-  const initState: StateType = {
-    counter: INIT_MIN_VALUE,
-    maxValue: INIT_MAX_VALUE,
-    minValue: INIT_MIN_VALUE,
-    counterStatus: CounterStatusType.count,
-    countingStatus: CountingStatusType.start,
-    errorStatus: ErrorStatusType.noError,
-  };
-
-  const [state, dispatch] = useReducer(reducer, initState);
+export const Counter: FC = () => {
+  const state = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
 
   const incIsDisabled =
     state.counterStatus === CounterStatusType.setup ||
@@ -67,7 +27,10 @@ export const Counter: React.FC = () => {
     state.counterStatus === CounterStatusType.setup ||
     state.countingStatus === CountingStatusType.start;
 
-  const setIsDisabled = state.counterStatus === CounterStatusType.count || state.errorStatus!==ErrorStatusType.noError;
+  const setIsDisabled =
+    state.counterStatus === CounterStatusType.count ||
+    state.errorStatus !== ErrorStatusType.noError;
+    
 
   useEffect(() => {
     const counterStr = localStorage.getItem(LocalStorageItems.counter);
@@ -99,7 +62,7 @@ export const Counter: React.FC = () => {
     if (countingStatusStr) {
       dispatch(setErrorStatusAction(JSON.parse(countingStatusStr)));
     }
-  }, []);
+  },[]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -151,10 +114,7 @@ export const Counter: React.FC = () => {
           maxValue={state.maxValue}
           errorStatus={state.errorStatus}
         />
-        <CounterControls
-          dispatch={dispatch}
-          setIsDisabled={setIsDisabled}
-        />
+        <CounterControls dispatch={dispatch} setIsDisabled={setIsDisabled} />
       </div>
       <div className={s.counterMain}>
         <CounterPanel

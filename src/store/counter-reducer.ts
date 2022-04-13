@@ -1,11 +1,5 @@
-import { Reducer } from "react";
-import {
-  CounterStatusType,
-  CountingStatusType,
-  ErrorStatusType,
-  INIT_MIN_VALUE,
-  StateType,
-} from "./Counter";
+import { Reducer } from "redux";
+
 const COUNTER_STEP = 1;
 
 enum ActionTypes {
@@ -18,32 +12,34 @@ enum ActionTypes {
   SET_ERROR_STATUS = "SET_ERROR_STATUS",
 }
 
-interface setCounter {
+type setCounter = {
   type: ActionTypes.SET_COUNTER;
   val: number;
-}
-interface incrementCounter {
+};
+
+type incrementCounter = {
   type: ActionTypes.INCREMENT_COUNTER;
-}
-interface resetCounter {
+};
+type resetCounter = {
   type: ActionTypes.RESET_COUNTER;
-}
-interface setMinValue {
+};
+type setMinValue = {
   type: ActionTypes.SETUP_MIN_VALUE;
   val: number;
-}
-interface setMaxValue {
+};
+type setMaxValue = {
   type: ActionTypes.SETUP_MAX_VALUE;
   val: number;
-}
-interface setCounterStatus {
+};
+type setCounterStatus = {
   type: ActionTypes.SET_COUNTER_STATUS;
   status: CounterStatusType;
-}
-interface setErrorStatus {
+};
+type setErrorStatus = {
   type: ActionTypes.SET_ERROR_STATUS;
   status: ErrorStatusType;
-}
+};
+
 
 export type Action =
   | setCounter
@@ -54,7 +50,55 @@ export type Action =
   | setCounterStatus
   | setErrorStatus;
 
-export const reducer: Reducer<StateType, Action> = (state, action) => {
+export enum CounterStatusType {
+  setup = "setup",
+  count = "count",
+}
+
+export enum ErrorStatusType {
+  noError = "noError",
+  errorMin = "errorMin",
+  errorMax = "errorMax",
+}
+export enum CountingStatusType {
+  count = "count",
+  start = "start",
+  end = "end",
+}
+
+export enum LocalStorageItems {
+  counterStatus = "counterStatus",
+  errorStatus = "errorStatus",
+  counter = "counter",
+  minValue = "minValue",
+  maxValue = "maxValue",
+  countingStatus = "countingStatus",
+}
+
+export type StateType = {
+  counter: number;
+  maxValue: number;
+  minValue: number;
+  counterStatus: CounterStatusType;
+  countingStatus: CountingStatusType;
+  errorStatus: ErrorStatusType;
+};
+export const INIT_MIN_VALUE = 0;
+export const INIT_MAX_VALUE = 5;
+
+const initState: StateType = {
+  counter: INIT_MIN_VALUE,
+  maxValue: INIT_MAX_VALUE,
+  minValue: INIT_MIN_VALUE,
+  counterStatus: CounterStatusType.count,
+  countingStatus: CountingStatusType.start,
+  errorStatus: ErrorStatusType.noError,
+};
+
+const counterReducer: Reducer<StateType, Action> = (
+  state = initState,
+  action,
+) => {
   switch (action.type) {
     case ActionTypes.SET_COUNTER:
       state.countingStatus = CountingStatusType.start;
@@ -99,7 +143,7 @@ export const reducer: Reducer<StateType, Action> = (state, action) => {
       return { ...state, errorStatus: action.status };
 
     default:
-      throw new Error("action not valid");
+      return state;
   }
 };
 
@@ -147,3 +191,5 @@ export const setErrorStatusAction = (
     status,
   };
 };
+
+export default counterReducer;

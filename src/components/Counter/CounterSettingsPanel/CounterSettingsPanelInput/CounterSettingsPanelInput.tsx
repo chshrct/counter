@@ -1,7 +1,7 @@
 import { Input } from "../../../../shared/Input";
 import React, { Dispatch } from "react";
 import s from "./CounterSettingsPanelInput.module.css";
-import { Action, setMaxValueAction, setMinValueAction } from "../../counterReducer";
+import { Action, setMaxValueAction, setMinValueAction } from "../../../../store/counter-reducer";
 
 type CounterSettingsPanelInputPropsType = {
   type: InputType;

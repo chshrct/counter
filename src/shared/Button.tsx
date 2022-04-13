@@ -7,7 +7,8 @@ type ButtonPropsType = DefaultButtonPropsType & {
 }
 
 export const Button: React.FC<ButtonPropsType> = (props) => {
-
+    console.log(props);
+    
     const {
         onClick,
         children,
@@ -19,27 +20,9 @@ export const Button: React.FC<ButtonPropsType> = (props) => {
     }
 
 
-    return <button onClick={onClickHandler}
+    return <button onClick={onClickHandler} 
                    {...restProps}>
         {children}</button>
 }
-
-// export class Button extends React.Component<ButtonPropsType>{
-//     constructor(props:ButtonPropsType) {
-//         super(props);
-//         this.onClickHandler = this.onClickHandler.bind(this)
-//     }
-//     onClickHandler(e:MouseEvent<HTMLButtonElement>){
-//         if(!this.props.onClick) return
-//         this.props.onClick(e)
-//     }
-//
-//     render() {
-//         const {onClick,children,...restProps}=this.props
-//         return <button onClick={this.onClickHandler}
-//                    {...restProps}
-//     >{children}</button>
-//     }
-// }
 
 

@@ -4,7 +4,7 @@ import {
   CounterSettingsPanelInput,
   InputType,
 } from "./CounterSettingsPanelInput/CounterSettingsPanelInput";
-import { ErrorStatusType } from "../Counter";
+import { ErrorStatusType } from "../../../store/counter-reducer";
 
 type CounterSettingsPanelPropsType = {
   minValue: number;

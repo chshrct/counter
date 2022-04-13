@@ -3,11 +3,11 @@ import s from "./CounterControls.module.css";
 import { Button } from "../../../shared/Button";
 import {
   Action,
+  CounterStatusType,
   incrementCounterAction,
   resetCounterAction,
   setCounterStatusAction,
-} from "../counterReducer";
-import { CounterStatusType } from "../Counter";
+} from "../../../store/counter-reducer";
 
 type CounterControlsPropsType = {
   incIsDisabled?: boolean;
@@ -18,9 +18,9 @@ type CounterControlsPropsType = {
 
 export const CounterControls: React.FC<CounterControlsPropsType> = (props) => {
   const { incIsDisabled, resIsDisabled, setIsDisabled, dispatch } = props;
-  const incClass = s.button + " " + (incIsDisabled && s.disabled);
-  const resetClass = s.button + " " + (resIsDisabled && s.disabled);
-  const setClass = s.button + " " + (setIsDisabled && s.disabled);
+  const incClass = s.button;
+  const resetClass = s.button;
+  const setClass = s.button;
 
   const setSettingsOnClick = () => {
     dispatch(setCounterStatusAction(CounterStatusType.count));
