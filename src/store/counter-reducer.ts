@@ -5,6 +5,7 @@ const COUNTER_STEP = 1;
 enum ActionTypes {
   SET_COUNTER = "SET_COUNTER",
   INCREMENT_COUNTER = "INCREMENT_COUNTER",
+  DECREMENT_COUNTER = "DECREMENT_COUNTER",
   RESET_COUNTER = "RESET_COUNTER",
   SETUP_MIN_VALUE = "SETUP_MIN_VALUE",
   SETUP_MAX_VALUE = "SETUP_MAX_VALUE",
@@ -12,43 +13,46 @@ enum ActionTypes {
   SET_ERROR_STATUS = "SET_ERROR_STATUS",
 }
 
-type setCounter = {
+type setCounterAction = {
   type: ActionTypes.SET_COUNTER;
   val: number;
 };
 
-type incrementCounter = {
+type incrementCounterAction = {
   type: ActionTypes.INCREMENT_COUNTER;
 };
-type resetCounter = {
+type decrementCounterAction = {
+  type: ActionTypes.DECREMENT_COUNTER;
+};
+type resetCounterAction = {
   type: ActionTypes.RESET_COUNTER;
 };
-type setMinValue = {
+type setMinValueAction = {
   type: ActionTypes.SETUP_MIN_VALUE;
   val: number;
 };
-type setMaxValue = {
+type setMaxValueAction = {
   type: ActionTypes.SETUP_MAX_VALUE;
   val: number;
 };
-type setCounterStatus = {
+type setCounterStatusAction = {
   type: ActionTypes.SET_COUNTER_STATUS;
   status: CounterStatusType;
 };
-type setErrorStatus = {
+type setErrorStatusAction = {
   type: ActionTypes.SET_ERROR_STATUS;
   status: ErrorStatusType;
 };
 
-
-export type Action =
-  | setCounter
-  | incrementCounter
-  | resetCounter
-  | setMinValue
-  | setMaxValue
-  | setCounterStatus
-  | setErrorStatus;
+export type RootAction =
+  | setCounterAction
+  | incrementCounterAction
+  | decrementCounterAction
+  | resetCounterAction
+  | setMinValueAction
+  | setMaxValueAction
+  | setCounterStatusAction
+  | setErrorStatusAction;
 
 export enum CounterStatusType {
   setup = "setup",
@@ -95,7 +99,7 @@ const initState: StateType = {
   errorStatus: ErrorStatusType.noError,
 };
 
-const counterReducer: Reducer<StateType, Action> = (
+const counterReducer: Reducer<StateType, RootAction> = (
   state = initState,
   action,
 ) => {
@@ -110,6 +114,14 @@ const counterReducer: Reducer<StateType, Action> = (
       }
       if (state.maxValue === state.counter)
         state.countingStatus = CountingStatusType.end;
+      return { ...state };
+    case ActionTypes.DECREMENT_COUNTER:
+      if (state.counter > state.minValue) {
+        state.counter = state.counter - COUNTER_STEP;
+        state.countingStatus = CountingStatusType.count;
+      }
+      if (state.minValue === state.counter)
+        state.countingStatus = CountingStatusType.start;
       return { ...state };
     case ActionTypes.RESET_COUNTER:
       state.countingStatus = CountingStatusType.start;
@@ -141,51 +153,55 @@ const counterReducer: Reducer<StateType, Action> = (
 
     case ActionTypes.SET_ERROR_STATUS:
       return { ...state, errorStatus: action.status };
-
     default:
       return state;
   }
 };
 
-export const setCounterAction = (value: number): setCounter => {
+export const setCounter = (value: number): setCounterAction => {
   return {
     type: ActionTypes.SET_COUNTER,
     val: value,
   };
 };
-export const incrementCounterAction = (): incrementCounter => {
+export const incrementCounter = (): incrementCounterAction => {
   return {
     type: ActionTypes.INCREMENT_COUNTER,
   };
 };
-export const resetCounterAction = (): resetCounter => {
+export const decrementCounter = (): decrementCounterAction => {
+  return {
+    type: ActionTypes.DECREMENT_COUNTER,
+  };
+};
+export const resetCounter = (): resetCounterAction => {
   return {
     type: ActionTypes.RESET_COUNTER,
   };
 };
-export const setMinValueAction = (val: number): setMinValue => {
+export const setMinValue = (val: number): setMinValueAction => {
   return {
     type: ActionTypes.SETUP_MIN_VALUE,
     val,
   };
 };
-export const setMaxValueAction = (val: number): setMaxValue => {
+export const setMaxValue = (val: number): setMaxValueAction => {
   return {
     type: ActionTypes.SETUP_MAX_VALUE,
     val,
   };
 };
-export const setCounterStatusAction = (
+export const setCounterStatus = (
   status: CounterStatusType,
-): setCounterStatus => {
+): setCounterStatusAction => {
   return {
     type: ActionTypes.SET_COUNTER_STATUS,
     status,
   };
 };
-export const setErrorStatusAction = (
+export const setErrorStatus = (
   status: ErrorStatusType,
-): setErrorStatus => {
+): setErrorStatusAction => {
   return {
     type: ActionTypes.SET_ERROR_STATUS,
     status,
